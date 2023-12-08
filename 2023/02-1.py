@@ -1,32 +1,24 @@
-with open("02.txt", "r") as fh:
-    lines = [l.strip() for l in fh.readlines()]	
+with open("02-test.txt", "r") as fh:
+    lines = [l.strip() for l in fh.readlines()]
 
-
-rules = {
-    "red": 12,
-    "green": 13,
-    "blue": 14,
-}
-
+limits = {"red": 12, "green": 13, "blue": 14}
 solution = 0
+games = {}
 
 for line in lines:
-    game_ok = True
-
-    game, game_draws = line.split(": ")
+    game, rounds = line.split(": ")
     game_number = int(game.split(" ")[1])
 
-    draws = game_draws.split("; ")
-    for draw in draws:
-        dice = draw.split(", ")
-        dice_dict = {d.split(" ")[1]: int(d.split()[0]) for d in dice}
+    game_rounds = {"red": 0, "green": 0, "blue": 0}
+    for game_round in rounds.split("; "):
+        for draw in game_round.split(", "):
+            num, col = draw.split(" ")
+            game_rounds[col] += int(num)
 
-        if any([num > rules[col] for col, num in dice_dict.items()]):
-            print(game_number, dice_dict, [num > rules[col] for col, num in dice_dict.items()])
-            game_ok = False
-
-
-    if game_ok:
+    if all([num <= limits[col] for col, num in game_rounds.items()]):
         solution += game_number
 
-print(solution)
+    games[int(game_number)] = game_rounds
+
+print(solution)    
+print(games)
