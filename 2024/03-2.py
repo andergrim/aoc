@@ -3,7 +3,6 @@ import re
 with open("03.txt") as fp:
     mem = "".join([l.strip() for l in fp.readlines()])
 
-# instructions = [m for m in re.findall(r'(mul)\((\d+),(\d+)\)|(do)\(\)|(don\'t)\(\)', mem)]
 pattern = r'(?P<instruction>mul|don\'t|do)\(([\d,]*)\)'
 instructions = [(op, param.split(',')) for op, param in re.findall(pattern, mem)]
 
